@@ -19,30 +19,37 @@ def all():
 @app.route('/add_donation', methods=['GET', 'POST'])
 def add_donation():
     if request.method == 'POST':
+        
+        temp_list = []
 
-        # code = request.args.get('')
-        # #saves donor already in db
-        # donation = Donation(value=request.form['amount'],
-        #                     donor=Donor.select().where(Donor.name == request.form['name']).get())
-        # donation.save()
+        for donor in Donor().select():
+            temp_list.append(donor.name)
 
-
-        # works for local host but not for heroku
-        try: #add a new donor
+        if request.form['name'] not in temp_list:
             donor = Donor(name=request.form['name'])
             donor.save()
 
-            donation = Donation(value=request.form['amount'], donor=donor)
-            donation.save()
+        donation = Donation(value=request.form['amount'],
+                            donor=Donor.select().where(Donor.name == request.form['name']).get())
+        donation.save() 
 
-        except Exception as exc:
-            print(exc)
-            print('donor already in database')
-            donation = Donation(value=request.form['amount'],
-                                donor=Donor.select().where(Donor.name == request.form['name']).get())
-            donation.save()
 
-        return redirect(url_for('all', error="Donor not in db"))
+        # works for local host but not for heroku
+        # try: #add a new donor
+        #     donor = Donor(name=request.form['name'])
+        #     donor.save()
+
+        #     donation = Donation(value=request.form['amount'], donor=donor)
+        #     donation.save()
+
+        # except Exception as exc:
+        #     print(exc)
+        #     print('donor already in database')
+        #     donation = Donation(value=request.form['amount'],
+        #                         donor=Donor.select().where(Donor.name == request.form['name']).get())
+        #     donation.save()
+
+        return redirect(url_for('all'))
 
     else:
         return render_template('add_donation.jinja2')
