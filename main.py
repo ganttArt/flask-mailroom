@@ -19,6 +19,15 @@ def all():
 @app.route('/add_donation', methods=['GET', 'POST'])
 def add_donation():
     if request.method == 'POST':
+
+        # code = request.args.get('')
+        # #saves donor already in db
+        # donation = Donation(value=request.form['amount'],
+        #                     donor=Donor.select().where(Donor.name == request.form['name']).get())
+        # donation.save()
+
+
+        # works for local host but not for heroku
         try: #add a new donor
             donor = Donor(name=request.form['name'])
             donor.save()
@@ -33,7 +42,7 @@ def add_donation():
                                 donor=Donor.select().where(Donor.name == request.form['name']).get())
             donation.save()
 
-        return redirect(url_for('all'))
+        return redirect(url_for('all', error="Donor not in db"))
 
     else:
         return render_template('add_donation.jinja2')
