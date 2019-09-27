@@ -33,22 +33,6 @@ def add_donation():
                             donor=Donor.select().where(Donor.name == request.form['name']).get())
         donation.save() 
 
-
-        # works for local host but not for heroku
-        # try: #add a new donor
-        #     donor = Donor(name=request.form['name'])
-        #     donor.save()
-
-        #     donation = Donation(value=request.form['amount'], donor=donor)
-        #     donation.save()
-
-        # except Exception as exc:
-        #     print(exc)
-        #     print('donor already in database')
-        #     donation = Donation(value=request.form['amount'],
-        #                         donor=Donor.select().where(Donor.name == request.form['name']).get())
-        #     donation.save()
-
         return redirect(url_for('all'))
 
     else:
